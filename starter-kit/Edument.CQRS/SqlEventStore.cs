@@ -23,7 +23,7 @@ namespace Edument.CQRS
             this.connectionString = connectionString;
         }
 
-        public IEnumerable LoadEventsFor<TAggregate>(Guid id)
+        public IEnumerable<Event> LoadEventsFor<TAggregate>(Guid id)
         {
             using (var con = new SqlConnection(connectionString))
             {
@@ -49,21 +49,21 @@ namespace Edument.CQRS
             }
         }
 
-        private object DeserializeEvent(string typeName, string data)
+        private Event DeserializeEvent(string typeName, string data)
         {
             var ser = new XmlSerializer(Type.GetType(typeName));
             var ms = new MemoryStream(Encoding.UTF8.GetBytes(data));
             ms.Seek(0, SeekOrigin.Begin);
-            return ser.Deserialize(ms);
+            return (Event)ser.Deserialize(ms);
         }
 
-        public void SaveEventsFor<TAggregate>(Guid? id, int eventsLoaded, ArrayList newEvents)
+        public void SaveEventsFor<TAggregate>(Guid? id, int eventsLoaded, IEnumerable<Event> newEvents)
         {
             // Establish the aggregate ID to save the events under and ensure they
             // all have the correct ID.
-            if (newEvents.Count == 0)
+            if (!newEvents.Any())
                 return;
-            Guid aggregateId = id ?? GetAggregateIdFromEvent(newEvents[0]);
+            Guid aggregateId = id ?? GetAggregateIdFromEvent(newEvents.First());
             foreach (var e in newEvents)
                 if (GetAggregateIdFromEvent(e) != aggregateId)
                     throw new InvalidOperationException(
@@ -82,15 +82,21 @@ namespace Edument.CQRS
 
                 // Add saving of the events.
                 cmd.Parameters.AddWithValue("CommitDateTime", DateTime.UtcNow);
-                for (int i = 0; i < newEvents.Count; i++)
-                {
-                    var e = newEvents[i];
+
+                var eventEnum = newEvents.GetEnumerator();
+
+                int i = 0;
+                while (eventEnum.MoveNext())
+                {                        
+                    var e = eventEnum.Current;
                     queryText.AppendFormat(
                         @"INSERT INTO [dbo].[Events] ([AggregateId], [SequenceNumber], [Type], [Body], [Timestamp])
                           VALUES(@AggregateId, {0}, @Type{1}, @Body{1}, @CommitDateTime);",
                         eventsLoaded + i, i);
                     cmd.Parameters.AddWithValue("Type" + i.ToString(), e.GetType().AssemblyQualifiedName);
                     cmd.Parameters.AddWithValue("Body" + i.ToString(), SerializeEvent(e));
+
+                    i++;
                 }
 
                 // Add commit.

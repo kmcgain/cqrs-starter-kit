@@ -90,7 +90,7 @@ namespace Edument.CQRS
                     
                     // With everything set up, we invoke the command handler, collecting the
                     // events that it produces.
-                    var resultEvents = new ArrayList();
+                    var resultEvents = new List<Event>();
                     foreach (var e in handler.Handle(al, (TCommand)c))
                         resultEvents.Add(e);
                     

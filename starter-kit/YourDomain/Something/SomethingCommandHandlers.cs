@@ -11,7 +11,7 @@ namespace YourDomain.Something
     public class SomethingCommandHandlers :
         IHandleCommand<MakeSomethingHappen, SomethingAggregate>
     {
-        public IEnumerable Handle(Func<Guid, SomethingAggregate> al, MakeSomethingHappen c)
+        public IEnumerable<Event> Handle(Func<Guid, SomethingAggregate> al, MakeSomethingHappen c)
         {
             var agg = al(c.Id);
 

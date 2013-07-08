@@ -8,6 +8,6 @@ namespace Edument.CQRS
 {
     public interface IHandleCommand<TCommand, TAggregate>
     {
-        IEnumerable Handle(Func<Guid, TAggregate> al, TCommand c);
+        IEnumerable<Event> Handle(Func<Guid, TAggregate> al, TCommand c);
     }
 }

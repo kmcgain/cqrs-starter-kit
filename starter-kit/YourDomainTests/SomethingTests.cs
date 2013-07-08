@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EventStore.ClientAPI;
 using NUnit.Framework;
 using YourDomain.Something;
 using Edument.CQRS;

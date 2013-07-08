@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Edument.CQRS
@@ -9,13 +11,13 @@ namespace Edument.CQRS
     {
         private class Stream
         {
-            public ArrayList Events;
+            public List<Event> Events;
         }
 
         private ConcurrentDictionary<Guid, Stream> store =
             new ConcurrentDictionary<Guid, Stream>();
 
-        public IEnumerable LoadEventsFor<TAggregate>(Guid id)
+        public IEnumerable<Event> LoadEventsFor<TAggregate>(Guid id)
         {
             // Get the current event stream; note that we never mutate the
             // Events array so it's safe to return the real thing.
@@ -23,16 +25,16 @@ namespace Edument.CQRS
             if (store.TryGetValue(id, out s))
                 return s.Events;
             else
-                return new ArrayList();
+                return new List<Event>();
         }
 
-        public void SaveEventsFor<TAggregate>(Guid? id, int eventsLoaded, ArrayList newEvents)
+        public void SaveEventsFor<TAggregate>(Guid? id, int eventsLoaded, IEnumerable<Event> newEvents)
         {
             // Establish the aggregate ID to save the events under and ensure they
             // all have the correct ID.
-            if (newEvents.Count == 0)
+            if (!newEvents.Any())
                 return;
-            Guid aggregateId = id ?? GetAggregateIdFromEvent(newEvents[0]);
+            Guid aggregateId = id ?? GetAggregateIdFromEvent(newEvents.First());
             foreach (var e in newEvents)
                 if (GetAggregateIdFromEvent(e) != aggregateId)
                     throw new InvalidOperationException(
@@ -55,8 +57,8 @@ namespace Edument.CQRS
                 // Create a new event list with existing ones plus our new
                 // ones (making new important for lock free algorithm!)
                 var newEventList = eventList == null
-                    ? new ArrayList()
-                    : (ArrayList)eventList.Clone();
+                    ? new List<Event>()
+                    : new List<Event>(eventList);
                 newEventList.AddRange(newEvents);
 
                 // Try to put the new event list in place atomically.
