@@ -40,8 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Membership\PersonChangedName.cs" />
+    <Compile Include="Membership\PersonCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Something\SomethingHappened.cs" />
+    <Compile Include="Racing\DogNominatedForRaceEvent.cs" />
+    <Compile Include="Racing\DogRegistered.cs" />
+    <Compile Include="Racing\MeetingCreated.cs" />
+    <Compile Include="Racing\TrainerAddedToDog.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Edument.CQRS\Edument.CQRS.csproj">

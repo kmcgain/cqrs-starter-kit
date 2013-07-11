@@ -1,16 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D2BAB57D-225D-4F4C-9410-ED39495A8FE0}</ProjectGuid>
+    <ProjectGuid>{26BEF52F-78A9-4FF0-A1A3-54B47A6E89A9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Edument.CQRS</RootNamespace>
-    <AssemblyName>Edument.CQRS</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>Racing</RootNamespace>
+    <AssemblyName>Racing</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,15 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EventStore.ClientAPI">
-      <HintPath>..\packages\EventStore.Client.1.1.0\lib\net40\EventStore.ClientAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,25 +39,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregate.cs" />
-    <Compile Include="BDDTest.cs" />
-    <Compile Include="BytesToString.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="Event.cs" />
-    <Compile Include="GetEventStore.cs" />
-    <Compile Include="GetEventStorePersistenceTest.cs" />
-    <Compile Include="InMemoryEventStore.cs" />
-    <Compile Include="SqlEventStore.cs" />
-    <Compile Include="IApplyEvent.cs" />
-    <Compile Include="IEventStore.cs" />
-    <Compile Include="IHandleCommand.cs" />
-    <Compile Include="ISubscribeTo.cs" />
-    <Compile Include="MessageDispatcher.cs" />
+    <Compile Include="Dog\CommandHandle\AddTrainerToDogHandler.cs" />
+    <Compile Include="Dog\CommandHandle\Exceptions.cs" />
+    <Compile Include="Dog\CommandHandle\NominateDogForMeetingHandler.cs" />
+    <Compile Include="Dog\CommandHandle\NominateDogForRaceEventHandler.cs" />
+    <Compile Include="Dog\CommandHandle\RegisterDog.cs" />
+    <Compile Include="Dog\CommandHandle\RegisterDogHandler.cs" />
+    <Compile Include="Dog\DogAggregate.cs" />
+    <Compile Include="Meeting\CommandHandle\CreateMeeting.cs" />
+    <Compile Include="Meeting\CommandHandle\CreateMeetingHandler.cs" />
+    <Compile Include="Meeting\CommandHandle\NominateDogForMeetingHandler.cs" />
+    <Compile Include="Meeting\MeetingAggregate.cs" />
+    <Compile Include="Meeting\RaceEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Commands\Commands.csproj">
+      <Project>{79E11DB8-1791-4169-8FDD-B1070A980E3C}</Project>
+      <Name>Commands</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Edument.CQRS\Edument.CQRS.csproj">
+      <Project>{D2BAB57D-225D-4F4C-9410-ED39495A8FE0}</Project>
+      <Name>Edument.CQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events\Events.csproj">
+      <Project>{B195F4C7-41EF-403C-AA05-0018B9DF25F8}</Project>
+      <Name>Events</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

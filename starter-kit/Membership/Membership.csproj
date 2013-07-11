@@ -1,16 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D2BAB57D-225D-4F4C-9410-ED39495A8FE0}</ProjectGuid>
+    <ProjectGuid>{D74664D6-9A8C-456D-8EB8-B34D8D011A06}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Edument.CQRS</RootNamespace>
-    <AssemblyName>Edument.CQRS</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>Membership</RootNamespace>
+    <AssemblyName>Membership</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,15 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EventStore.ClientAPI">
-      <HintPath>..\packages\EventStore.Client.1.1.0\lib\net40\EventStore.ClientAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,24 +39,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregate.cs" />
-    <Compile Include="BDDTest.cs" />
-    <Compile Include="BytesToString.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="Event.cs" />
-    <Compile Include="GetEventStore.cs" />
-    <Compile Include="GetEventStorePersistenceTest.cs" />
-    <Compile Include="InMemoryEventStore.cs" />
-    <Compile Include="SqlEventStore.cs" />
-    <Compile Include="IApplyEvent.cs" />
-    <Compile Include="IEventStore.cs" />
-    <Compile Include="IHandleCommand.cs" />
-    <Compile Include="ISubscribeTo.cs" />
-    <Compile Include="MessageDispatcher.cs" />
+    <Compile Include="Person\CommandHandle\ChangePersonName.cs" />
+    <Compile Include="Person\CommandHandle\ChangePersonNameHandler.cs" />
+    <Compile Include="Person\CommandHandle\CreatePerson.cs" />
+    <Compile Include="Person\CommandHandle\CreatePersonHandler.cs" />
+    <Compile Include="Person\CommandHandle\Exceptions.cs" />
+    <Compile Include="Person\CommandHandle\KennelDog.cs" />
+    <Compile Include="Person\KenneledDog.cs" />
+    <Compile Include="Person\PersonAggregate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Commands\Commands.csproj">
+      <Project>{79E11DB8-1791-4169-8FDD-B1070A980E3C}</Project>
+      <Name>Commands</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Edument.CQRS\Edument.CQRS.csproj">
+      <Project>{D2BAB57D-225D-4F4C-9410-ED39495A8FE0}</Project>
+      <Name>Edument.CQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events\Events.csproj">
+      <Project>{B195F4C7-41EF-403C-AA05-0018B9DF25F8}</Project>
+      <Name>Events</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

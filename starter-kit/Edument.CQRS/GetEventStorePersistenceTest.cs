@@ -22,9 +22,9 @@ namespace Edument.CQRS
             
 
             var testAggregate = new TestAggregate() {Id = Guid.NewGuid()};            
-            getEventStore.SaveEventsFor<TestAggregate>(testAggregate.Id, ExpectedVersion.Any, new List<Event>(){new Tested(){Prop = 1}});
+            getEventStore.SaveEventsFor<TestAggregate>(testAggregate.Id, ExpectedVersion.Any, new List<Event>(){new Tested(Guid.NewGuid()){Prop = 1}});
 
-            var readEvents = getEventStore.LoadEventsFor<TestAggregate>(testAggregate.Id.Value);
+            var readEvents = getEventStore.LoadEventsFor<TestAggregate>(testAggregate.Id);
 
             Assert.AreEqual(1, readEvents.Count());
 
@@ -37,13 +37,13 @@ namespace Edument.CQRS
             
         }
 
-        public class Tested : Event
+        public class Tested : AggregateEvent
         {
+            public Tested(Guid aggregateId) : base(aggregateId)
+            {
+            }
+
             public virtual int Prop { get; set; }
         }
-    }
-
-    public interface Event
-    {
     }
 }

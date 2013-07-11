@@ -20,7 +20,7 @@ namespace Edument.CQRS
         /// <summary>
         /// The unique ID of the aggregate, if currently known.
         /// </summary>
-        public Guid? Id { get; internal set; }
+        public Guid Id { get; internal set; }
 
         /// <summary>
         /// Enuerates the supplied events and applies them in order to the aggregate.
